@@ -3,4 +3,6 @@
     <string name="search_activity_prompt">Enter a search below:</string>
     <string name="search_activity_edittext_hint">Shoes, Clothing, Bags, etc.</string>
     <string name="search_activity_button_text">Search</string>
+    <string name="search_activity_search_error">An error has occurred. Please try again.</string>
+
 </resources>

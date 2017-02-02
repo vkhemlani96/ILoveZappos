@@ -54,6 +54,7 @@
 
 
         <EditText
+            android:id="@+id/search_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -63,11 +64,13 @@
 
         <Button
             style="@style/Widget.AppCompat.Button.Colored"
+            android:id="@+id/search_button"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:text="@string/search_activity_button_text"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="8dp"
+            android:onClick="beginSearch"/>
 
     </LinearLayout>
 

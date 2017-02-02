@@ -8,6 +8,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!--<style name="AlertDialogThemed" parent="Theme.AppCompat.Light.Dialog.Alert">-->
+        <!--<item name="android:colorPrimary">#00397F</item>-->
+        <!--<item name="android:textColorPrimary">#22397F</item>-->
+        <!--<item name="android:colorAccent">#00397F</item>-->
+
+        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <!--<item name="colorAccent">@color/colorAccent</item>-->
+    <!--</style>-->
+
     <style name="SplashTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
