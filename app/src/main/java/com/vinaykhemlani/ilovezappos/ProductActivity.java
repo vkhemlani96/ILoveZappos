@@ -1,7 +1,9 @@
 package com.vinaykhemlani.ilovezappos;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,6 +38,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import me.relex.circleindicator.CircleIndicator;
+
 import static com.vinaykhemlani.ilovezappos.R.id.fab;
 
 
@@ -45,8 +51,7 @@ public class ProductActivity extends AppCompatActivity {
     private final String DESCRIPTION_PREFIX = "<span class=\"description summary\"><ul>";
     private final String DESCRIPTION_SUFFIX = "</ul></span>";
 
-    private String productID;
-    private String thumbnailURL;
+    private SearchResult product;
 
     private final long AUTOSCROLL_DURATION = 3000;  // 3s on each page
     private ViewPager mViewPager;
@@ -64,27 +69,15 @@ public class ProductActivity extends AppCompatActivity {
         if (getIntent().hasExtra(ProductActivity.DATA_IDENTIFIER)) {
 
             ActivityProductBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_product);
-            SearchResult result = (SearchResult) getIntent().getSerializableExtra(ProductActivity.DATA_IDENTIFIER);
-            binding.setProduct(result);
+            product = (SearchResult) getIntent().getSerializableExtra(ProductActivity.DATA_IDENTIFIER);
+            binding.setProduct(product);
 
-            productID = result.getProductId();
-            thumbnailURL = result.getThumbnailImageUrl();
-
-            getAdditionalProductData(result.getProductId());
+            getAdditionalProductData(product.getProductId());
 
         }
         //TODO handle case where app opens through schema and hasn't loaded data
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
+        initializeFAB();
     }
 
     @Override
@@ -99,6 +92,29 @@ public class ProductActivity extends AppCompatActivity {
         super.onResume();
         if (mViewPagerAutoscrollHandler != null)
             mViewPagerAutoscrollHandler.postDelayed(mViewPagerAnimator, AUTOSCROLL_DURATION);
+    }
+
+    private void initializeFAB() {
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final TextView notificationText = (TextView) findViewById(R.id.add_to_cart);
+        notificationText.setScaleX(0.0f);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Animation a = AnimationUtils.loadAnimation(ProductActivity.this, R.anim.added_to_shopping_cart_anim);
+                a.reset();
+                a.setFillAfter(true);
+                a.setFillBefore(true);
+                if (notificationText != null) {
+                    notificationText.setScaleX(1.0f);
+                    notificationText.clearAnimation();
+                    notificationText.startAnimation(a);
+                }
+            }
+        });
+
     }
 
     private void getAdditionalProductData(String productId) {
@@ -144,13 +160,14 @@ public class ProductActivity extends AppCompatActivity {
                 .replaceAll("!/strong!", "</></strong>");
 
         TextView productDescription = (TextView) findViewById(R.id.product_description);
-        productDescription.setText(Html.fromHtml(descriptionSubstring));
+        if (productDescription != null)
+            productDescription.setText(Html.fromHtml(descriptionSubstring));
 
-        //Converts thumbail url into multiview (larger) image RegEx
-        String urlRegex = thumbnailURL.replaceFirst("t-THUMBNAIL.jpg", ".+-MULTIVIEW.jpg");
+        //Converts thumbnail url into multiview (larger) image RegEx
+        String urlRegex = product.getThumbnailImageUrl().replaceFirst("t-THUMBNAIL.jpg", ".+-MULTIVIEW.jpg");
         Pattern urlPattern = Pattern.compile(urlRegex);
 
-        List<String> urls = new ArrayList<String>();
+        List<String> urls = new ArrayList<>();
 
         Matcher m = urlPattern.matcher(response);
         while (m.find()) {
@@ -174,7 +191,15 @@ public class ProductActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.placeholderImage).setVisibility(View.GONE);
+        CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
+        if (indicator != null)
+            indicator.setViewPager(mViewPager);
+
+
+        View placeholderImage = findViewById(R.id.placeholderImage);
+        if (placeholderImage != null)
+            placeholderImage.setVisibility(View.GONE);
+
         mViewPager.setVisibility(View.VISIBLE);
 
         mViewPagerAutoscrollHandler = new Handler();
@@ -200,6 +225,12 @@ public class ProductActivity extends AppCompatActivity {
 
     }
 
+    public void viewProductSite(View v) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(product.getProductUrl()));
+        startActivity(i);
+    }
+
 }
 
 class ProductImageAdapter extends PagerAdapter {
@@ -207,16 +238,10 @@ class ProductImageAdapter extends PagerAdapter {
     private Context mContext;
     private List<String> imageUrls;
 
-    public ProductImageAdapter(Context context) {
-        mContext = context;
-    }
-
-    public ProductImageAdapter(Context context, List<String> urls) {
+    ProductImageAdapter(Context context, List<String> urls) {
         mContext = context;
         imageUrls = urls;
     }
-
-
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
