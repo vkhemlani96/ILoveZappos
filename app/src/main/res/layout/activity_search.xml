@@ -1,79 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_search"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:gravity="center_vertical"
-    android:layout_centerVertical="true"
-    android:background="@color/colorPrimary"
-    tools:context="com.vinaykhemlani.ilovezappos.SearchActivity">
+<!--<ScrollView-->
+    <!--android:id="@+id/activity_search"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--tools:context="com.vinaykhemlani.ilovezappos.SearchActivity">-->
 
-    <LinearLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_height="match_parent"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:background="@drawable/card_background_white"
-        app:elevation="8dp" >
-
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:paddingEnd="@dimen/activity_vertical_margin"
+        android:gravity="center_vertical"
+        android:background="@color/colorPrimary">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".5"
-            android:orientation="horizontal"
-            android:weightSum="1"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
-            android:gravity="center">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:background="@drawable/card_background_white"
+            app:elevation="8dp" >
 
-            <ImageView
-                android:contentDescription="@string/search_activity_content_description"
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".5"
+                android:orientation="horizontal"
+                android:weightSum="1"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="32dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:contentDescription="@string/search_activity_content_description"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:src="@drawable/zappos_logo"
+                    android:layout_weight=".75"
+                    android:cropToPadding="false"
+                    android:adjustViewBounds="true" />
+
+            </LinearLayout>
+
+            <!-- imeActionId of 3 corresponds to EditorInfo.IME_ACTION_SEARCH-->
+            <EditText
+                android:id="@+id/search_field"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:src="@drawable/zappos_logo"
-                android:layout_weight=".75"
-                android:cropToPadding="false"
-                android:adjustViewBounds="true" />
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:hint="@string/search_activity_edittext_hint"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:imeOptions="actionSearch"
+                android:imeActionId="3"
+                android:gravity="center"/>
+
+            <Button
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:id="@+id/search_button"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/search_activity_button_text"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:onClick="beginSearch"/>
 
         </LinearLayout>
 
-        <!--<TextView-->
-        <!--style="@style/TextAppearance.AppCompat.Headline"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center_horizontal"-->
-        <!--android:text="@string/search_activity_prompt" />-->
+    </RelativeLayout>
 
-
-        <EditText
-            android:id="@+id/search_field"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:hint="@string/search_activity_edittext_hint"
-            android:gravity="center"/>
-
-        <Button
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:id="@+id/search_button"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:text="@string/search_activity_button_text"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp"
-            android:onClick="beginSearch"/>
-
-    </LinearLayout>
-
-</RelativeLayout>
+<!--</ScrollView>-->

@@ -1,12 +1,16 @@
 <resources>
     <string name="app_name">ILoveZappos</string>
+    <string name="product_intent">Product Intent Label</string>
+
     <string name="search_activity_prompt">Enter a search below:</string>
     <string name="search_activity_edittext_hint">Shoes, Clothing, Bags, etc.</string>
     <string name="search_activity_button_text">Search</string>
     <string name="search_activity_search_error">An error has occurred. Please try again.</string>
     <string name="search_activity_content_description">Zappos Company Logo</string>
 
-    <string name="product_activity_button_text">View More on Zappos.com</string>
+    <string name="product_activity_website_button">View More on Zappos.com</string>
+    <string name="product_activity_product_error">"Could not find product.</string>
+    <string name="product_activity_share_button">Share this with a friend</string>
 
     <string name="title_activity_product">ProductActivity</string>
 

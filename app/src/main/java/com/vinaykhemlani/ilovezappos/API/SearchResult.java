@@ -94,7 +94,7 @@ public class SearchResult implements Serializable {
     public static void loadImage(ImageView view, String imageUrl) {
         Picasso.with(view.getContext())
                 .load(imageUrl)
-                .placeholder(R.drawable.zappos_logo)
+                .placeholder(R.drawable.zappos_loading_placeholder)
                 .into(view);
     }
 }

@@ -6,12 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.Editable;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vinaykhemlani.ilovezappos.API.APIResponse;
@@ -24,18 +27,18 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static android.R.id.message;
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
-
 public class SearchActivity extends AppCompatActivity implements Callback<APIResponse> {
 
     ZapposAPIService apiService;
     ProgressDialog progressDialog;
+    String searchQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        initializeSearchField();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ZapposAPIService.BASE_URL)
@@ -46,51 +49,68 @@ public class SearchActivity extends AppCompatActivity implements Callback<APIRes
 
     }
 
+    private void initializeSearchField() {
+
+        EditText editText = (EditText) findViewById(R.id.search_field);
+        if (editText != null) {
+            editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        beginSearch(null);
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
+
+    }
+
     public void beginSearch(View v) {
 
-        // Make sure search is being called by search button
-        if (v.getId() == R.id.search_button) {
+        // If there is an active network connection, perform the search
+        if (isNetworkAvailable()) {
 
-            // If there is an active network connection, perform the search
-            if (isNetworkAvailable()) {
+            // Close the keyboard if it's open
+            View view = this.getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
 
-                EditText searchField = (EditText) findViewById(R.id.search_field);
+            EditText searchField = (EditText) findViewById(R.id.search_field);
 
-                if (searchField != null) {
+            if (searchField != null) {
 
-                    String searchQuery = searchField.getText().toString();
+                searchQuery = searchField.getText().toString();
 
-                    // Note: Zappos' website does not check for empty string so it is allowed here.
-                    Call<APIResponse> response = apiService.performSearch(searchQuery);
-                    response.enqueue(SearchActivity.this);
+                // Note: Zappos' website does not reject an empty string so it is allowed here.
+                Call<APIResponse> response = apiService.performSearch(searchQuery);
+                response.enqueue(SearchActivity.this);
 
-                    progressDialog = ProgressDialog.show(this, "",
-                            "Loading search results for \"" + searchQuery + "\"...", true);
+                progressDialog = ProgressDialog.show(this, "",
+                        "Loading search results for \"" + searchQuery + "\"...", true);
 
-                } else {
+            } else {
 
-                    errorFunction();
-                    System.err.println("searchField is null");
-
-                }
-
-
-            } else {    // Otherwise, notify the user to retry with an active connection.
-
-                new AlertDialog.Builder(this)
-                        .setMessage("You are currently not connected to the internet. " +
-                                "Please connect to the internet and retry your search!")
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).show();
+                errorFunction();
+                System.err.println("searchField is null");
 
             }
 
-        } else {    // If the search button is not calling this function, debug
-            System.err.println("Search not being called by search button");
-            errorFunction();
+
+        } else {    // Otherwise, notify the user to retry with an active connection.
+
+            new AlertDialog.Builder(this)
+                    .setMessage("You are currently not connected to the internet. " +
+                            "Please connect to the internet and retry your search!")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+
         }
 
     }
@@ -101,7 +121,7 @@ public class SearchActivity extends AppCompatActivity implements Callback<APIRes
      * Displays a Toast notification when there is a problem with the API response.
      */
     private void errorFunction() {
-        Toast.makeText(this, R.string.search_activity_search_error, Toast.LENGTH_LONG);
+        Toast.makeText(this, R.string.search_activity_search_error, Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -131,8 +151,6 @@ public class SearchActivity extends AppCompatActivity implements Callback<APIRes
     @Override
     public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
 
-        System.out.println("Response Status: " + response.code());
-
         // Dismiss progress dialog
         if (progressDialog != null) {
             progressDialog.dismiss();
@@ -144,6 +162,7 @@ public class SearchActivity extends AppCompatActivity implements Callback<APIRes
 
             Intent intent = new Intent(this, ProductActivity.class);
             intent.putExtra(ProductActivity.DATA_IDENTIFIER, firstResult);
+            intent.putExtra(ProductActivity.SEARCH_TERM_IDENTIFER, searchQuery);
             startActivity(intent);
 
         } else {
