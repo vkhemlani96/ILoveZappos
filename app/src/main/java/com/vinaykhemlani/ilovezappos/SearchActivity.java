@@ -3,6 +3,7 @@ package com.vinaykhemlani.ilovezappos;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.vinaykhemlani.ilovezappos.API.APIResponse;
+import com.vinaykhemlani.ilovezappos.API.SearchResult;
 import com.vinaykhemlani.ilovezappos.API.ZapposAPIService;
 
 import retrofit2.Call;
@@ -21,6 +23,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static android.R.id.message;
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class SearchActivity extends AppCompatActivity implements Callback<APIResponse> {
 
@@ -134,7 +139,13 @@ public class SearchActivity extends AppCompatActivity implements Callback<APIRes
         }
 
         if (response.isSuccessful()) {
-            System.out.println(response.body());
+
+            SearchResult firstResult = response.body().getResults().get(0);
+
+            Intent intent = new Intent(this, ProductActivity.class);
+            intent.putExtra(ProductActivity.DATA_IDENTIFIER, firstResult);
+            startActivity(intent);
+
         } else {
             errorFunction();
         }

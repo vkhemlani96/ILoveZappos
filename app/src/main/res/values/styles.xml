@@ -9,13 +9,13 @@
     </style>
 
     <!--<style name="AlertDialogThemed" parent="Theme.AppCompat.Light.Dialog.Alert">-->
-        <!--<item name="android:colorPrimary">#00397F</item>-->
-        <!--<item name="android:textColorPrimary">#22397F</item>-->
-        <!--<item name="android:colorAccent">#00397F</item>-->
+    <!--<item name="android:colorPrimary">#00397F</item>-->
+    <!--<item name="android:textColorPrimary">#22397F</item>-->
+    <!--<item name="android:colorAccent">#00397F</item>-->
 
-        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
-        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-        <!--<item name="colorAccent">@color/colorAccent</item>-->
+    <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+    <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+    <!--<item name="colorAccent">@color/colorAccent</item>-->
     <!--</style>-->
 
     <style name="SplashTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
@@ -23,6 +23,28 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/colorPrimary</item>
+    </style>
+
+    <style name="ILoveZapposTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="ILoveZapposTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:padding">0dp</item>
+        <item name="android:layout_margin">0dp</item>
+        <item name="colorPrimary">@android:color/white</item>
+    </style>
+
+    <style name="ILoveZapposTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:displayOptions">showHome</item>
+    </style>
+
+    <style name="ILoveZapposTheme.Title" parent="TextAppearance.AppCompat.Title"></style>
+    <style name="ILoveZapposTheme.Subhead" parent="TextAppearance.AppCompat.Subhead"></style>
+    <style name="ILoveZapposTheme.Tiny" parent="TextAppearance.AppCompat.Small">
+        <item name="android:alpha">.5</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>

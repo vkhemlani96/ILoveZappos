@@ -1,5 +1,13 @@
 package com.vinaykhemlani.ilovezappos.API;
 
+import android.databinding.BindingAdapter;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
+import com.vinaykhemlani.ilovezappos.R;
+
+import java.io.Serializable;
+
 /**
  * Created by Vinay on 2/1/17.
  *  This is used to map the JSON keys from the individual search results
@@ -9,7 +17,7 @@ package com.vinaykhemlani.ilovezappos.API;
  *  toString function prints class variables
  */
 
-public class SearchResult {
+public class SearchResult implements Serializable {
 
     String brandName;
     String thumbnailImageUrl;
@@ -28,6 +36,10 @@ public class SearchResult {
 
     public String getThumbnailImageUrl() {
         return thumbnailImageUrl;
+    }
+
+    public String getFullSizedImageUrl() {
+        return thumbnailImageUrl.replaceFirst("t-THUMBNAIL.jpg", "p-MULTIVIEW.jpg");
     }
 
     public String getProductId() {
@@ -76,5 +88,13 @@ public class SearchResult {
                 ", productUrl='" + productUrl + '\'' +
                 ", productName='" + productName + '\'' +
                 '}';
+    }
+
+    @BindingAdapter({"bind:imageUrl"})
+    public static void loadImage(ImageView view, String imageUrl) {
+        Picasso.with(view.getContext())
+                .load(imageUrl)
+                .placeholder(R.drawable.zappos_logo)
+                .into(view);
     }
 }
