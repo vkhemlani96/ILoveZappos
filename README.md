@@ -7,7 +7,7 @@ Additionally, the application features bonus material including a Material Desig
 Ignoring core value #10, the app also goes beyond to make a request to the Zappos website to retrieve more information on the product. More specifically, it uses Volley to pull the source code for the respective website page for the product. It then finds the description in the source code and formats and displays the text on the app. In addition, it finds all the product images and uses Picasso to display them in the form of an autoscrolling ViewPager at the top application. 
 
 ###Screenshots
-![alt tag](https://github.com/vkhemlani96/ILoveZappos/blob/master/screenshots/1.jpg)
+![alt tag](https://github.com/vkhemlani96/ILoveZappos/blob/master/screenshots/1.png)
 ![alt tag](https://github.com/vkhemlani96/ILoveZappos/blob/master/screenshots/2.png)
 ![alt tag](https://github.com/vkhemlani96/ILoveZappos/blob/master/screenshots/3.png)
 ![alt tag](https://github.com/vkhemlani96/ILoveZappos/blob/master/screenshots/4.png)
